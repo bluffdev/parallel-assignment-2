@@ -42,7 +42,7 @@ public class BirthdayGuest implements Runnable {
 
     @Override
     public void run() {
-        while (this.isPartyOver.get() == false) {
+        do {
             labyrinthLock.lock();
             try {
                 if (this.tags[this.id - 1].get() == true) {
@@ -65,6 +65,6 @@ public class BirthdayGuest implements Runnable {
             } finally {
                 labyrinthLock.unlock();
             }
-        }
+        } while (this.isPartyOver.get() == false);
     }
 }

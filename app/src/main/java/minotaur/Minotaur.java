@@ -29,16 +29,9 @@ public class Minotaur implements Runnable {
     @Override
     public void run() {
         while (guestCounter < numOfGuests) {
-            // System.out.println("Not End");
-            // if (this.guestTags[this.last].get() == true)
-            // continue;
-            // else {
-            // System.out.println("meme");
-            // }
             this.labyrinthLock.lock();
             try {
                 if (this.guestTags[this.last].get() == false) {
-                    // System.out.println("Minotaur Locked");
                     // generate a random number
                     int randomGuest = ThreadLocalRandom.current().nextInt(0, numOfGuests);
                     // let that person enter the labyrinth
@@ -48,17 +41,15 @@ public class Minotaur implements Runnable {
                     if (!this.enteredSet.contains(randomGuest)) {
                         this.enteredSet.add(randomGuest);
                         this.guestCounter += 1;
-                        if (this.guestCounter == numOfGuests) {
-                            this.isPartyOver.set(true);
-                            System.out.println(this.enteredSet);
-                        }
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
+                if (this.enteredSet.size() == numOfGuests) {
+                    this.isPartyOver.set(true);
+                }
                 this.labyrinthLock.unlock();
-                // System.out.println("Minotaur Unlocked");
             }
         }
     }

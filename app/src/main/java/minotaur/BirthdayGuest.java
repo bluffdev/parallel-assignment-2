@@ -8,15 +8,15 @@ public class BirthdayGuest implements Runnable {
     private Integer id;
     private ReentrantLock labyrinthLock;
     private AtomicBoolean cupcakeWasEaten;
-    private AtomicBoolean[] tags;
+    private AtomicBoolean tag;
     private AtomicBoolean isPartyOver;
 
-    public BirthdayGuest(Integer id, ReentrantLock labyrinthLock, AtomicBoolean cupcakeWasEaten, AtomicBoolean[] tags,
+    public BirthdayGuest(Integer id, ReentrantLock labyrinthLock, AtomicBoolean cupcakeWasEaten, AtomicBoolean tag,
             AtomicBoolean isPartyOver) {
         this.id = id;
         this.labyrinthLock = labyrinthLock;
         this.cupcakeWasEaten = cupcakeWasEaten;
-        this.tags = tags;
+        this.tag = tag;
         this.isPartyOver = isPartyOver;
     }
 
@@ -45,10 +45,11 @@ public class BirthdayGuest implements Runnable {
         do {
             labyrinthLock.lock();
             try {
-                if (this.tags[this.id - 1].get() == true) {
+                if (this.tag.get() == true) {
                     this.enter();
                     if (this.cupcakeWasEaten.get() == true) {
                         requestNewCupcake();
+                        this.cupcakeWasEaten.set(false);
                     }
                     int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
                     if (randomNum == 0) {
@@ -58,7 +59,7 @@ public class BirthdayGuest implements Runnable {
                         this.cupcakeWasEaten.set(true);
                     }
                     this.exit();
-                    this.tags[this.id - 1].set(false);
+                    this.tag.set(false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

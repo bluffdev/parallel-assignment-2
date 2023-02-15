@@ -1,4 +1,4 @@
-package minotaur;
+package minotaur.one;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
@@ -29,7 +29,7 @@ public class Birthday {
         Thread minotaurThread = new Thread(minotaur);
         minotaurThread.start();
         for (int i = 0; i < guestCount; i++) {
-            BirthdayGuest newGuest = new BirthdayGuest(i + 1, labyrinthLock, cupcakeWasEaten, this.guestTags[i],
+            Guest newGuest = new Guest(i + 1, labyrinthLock, cupcakeWasEaten, this.guestTags[i],
                     this.isPartyOver);
             guests[i] = new Thread(newGuest);
             guests[i].start();

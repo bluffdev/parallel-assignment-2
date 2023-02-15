@@ -1,4 +1,4 @@
-package minotaur;
+package minotaur.one;
 
 import java.util.HashSet;
 import java.util.Set;

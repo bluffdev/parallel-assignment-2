@@ -1,4 +1,4 @@
-package minotaur;
+package minotaur.two;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;

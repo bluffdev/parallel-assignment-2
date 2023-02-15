@@ -1,17 +1,17 @@
-package minotaur;
+package minotaur.one;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BirthdayGuest implements Runnable {
+public class Guest implements Runnable {
     private Integer id;
     private ReentrantLock labyrinthLock;
     private AtomicBoolean cupcakeWasEaten;
     private AtomicBoolean tag;
     private AtomicBoolean isPartyOver;
 
-    public BirthdayGuest(Integer id, ReentrantLock labyrinthLock, AtomicBoolean cupcakeWasEaten, AtomicBoolean tag,
+    public Guest(Integer id, ReentrantLock labyrinthLock, AtomicBoolean cupcakeWasEaten, AtomicBoolean tag,
             AtomicBoolean isPartyOver) {
         this.id = id;
         this.labyrinthLock = labyrinthLock;

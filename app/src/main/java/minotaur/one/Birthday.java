@@ -1,12 +1,13 @@
 package minotaur.one;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Birthday {
     private Integer guestCount;
     private Thread[] guests;
-    private ReentrantLock labyrinthLock;
+    private Lock labyrinthLock;
     private AtomicBoolean cupcakeWasEaten;
     private AtomicBoolean[] guestTags;
     private AtomicBoolean isPartyOver;
@@ -25,7 +26,7 @@ public class Birthday {
 
     public void simulate() {
         // Initializes threads
-        Minotaur minotaur = new Minotaur(guestCount, this.guestTags, labyrinthLock, this.isPartyOver);
+        Counter minotaur = new Counter(guestCount, this.guestTags, labyrinthLock, this.isPartyOver);
         Thread minotaurThread = new Thread(minotaur);
         minotaurThread.start();
         for (int i = 0; i < guestCount; i++) {

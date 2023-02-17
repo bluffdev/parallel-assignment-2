@@ -1,16 +1,13 @@
 package minotaur.two;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Guest implements Runnable {
     private Integer id;
-    private AtomicBoolean isRoomAvailable;
-    private SignTTASLock sign;
+    private SignBackoffLock sign;
 
-    public Guest(Integer id, AtomicBoolean isRoomAvailable, SignTTASLock sign) {
+    public Guest(Integer id, SignBackoffLock sign) {
         this.id = id;
-        this.isRoomAvailable = isRoomAvailable;
         this.sign = sign;
     }
 
@@ -32,8 +29,6 @@ public class Guest implements Runnable {
         Boolean wantsToEnter = this.doesGuestWantToEnter();
 
         while (wantsToEnter) {
-            // if (this.isRoomAvailable.compareAndSet(Status.AVAILABLE.value(),
-            // Status.BUSY.value())) {
             this.sign.lock();
             try {
                 this.enterRoom();
@@ -41,11 +36,9 @@ public class Guest implements Runnable {
                 e.printStackTrace();
             } finally {
                 this.exitRoom();
-                this.isRoomAvailable.set(Status.AVAILABLE.value());
                 this.sign.unlock();
                 wantsToEnter = this.doesGuestWantToEnter();
             }
-            // }
         }
     }
 }

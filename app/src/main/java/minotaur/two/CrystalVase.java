@@ -3,7 +3,6 @@ package minotaur.two;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class CrystalVase {
     private Integer guestCount;
@@ -13,7 +12,7 @@ public class CrystalVase {
     }
 
     public void simulate() {
-        Lock roomLock = new ReentrantLock();
+        Lock sign = new SignTTASLock();
         AtomicBoolean isRoomAvailable = new AtomicBoolean(true);
 
         Date start = new Date();
@@ -21,7 +20,7 @@ public class CrystalVase {
         Thread[] guests = new Thread[this.guestCount];
 
         for (int i = 0; i < this.guestCount; i++) {
-            Guest newGuest = new Guest(i + 1, isRoomAvailable, roomLock);
+            Guest newGuest = new Guest(i + 1, isRoomAvailable, sign);
             guests[i] = new Thread(newGuest);
             guests[i].start();
         }

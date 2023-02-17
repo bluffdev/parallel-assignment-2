@@ -4,29 +4,29 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 
-enum Status {
-    AVAILABLE(true), BUSY(false);
+// enum Status {
+//     AVAILABLE(true), BUSY(false);
 
-    private Boolean status;
+//     private Boolean status;
 
-    public Boolean value() {
-        return this.status;
-    }
+//     public Boolean value() {
+//         return this.status;
+//     }
 
-    private Status(Boolean status) {
-        this.status = status;
-    }
-}
+//     private Status(Boolean status) {
+//         this.status = status;
+//     }
+// }
 
 public class Guest implements Runnable {
     private Integer id;
     private AtomicBoolean isRoomAvailable;
-    private Lock roomLock;
+    private Lock sign;
 
-    public Guest(Integer id, AtomicBoolean isRoomAvailable, Lock roomLock) {
+    public Guest(Integer id, AtomicBoolean isRoomAvailable, Lock sign) {
         this.id = id;
         this.isRoomAvailable = isRoomAvailable;
-        this.roomLock = roomLock;
+        this.sign = sign;
     }
 
     private Boolean doesGuestWantToEnter() {
@@ -47,19 +47,20 @@ public class Guest implements Runnable {
         Boolean wantsToEnter = this.doesGuestWantToEnter();
 
         while (wantsToEnter) {
-            if (this.isRoomAvailable.compareAndSet(Status.AVAILABLE.value(), Status.BUSY.value())) {
-                this.roomLock.lock();
-                try {
-                    this.enterRoom();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    this.exitRoom();
-                    this.isRoomAvailable.set(Status.AVAILABLE.value());
-                    this.roomLock.unlock();
-                    wantsToEnter = this.doesGuestWantToEnter();
-                }
+            // if (this.isRoomAvailable.compareAndSet(Status.AVAILABLE.value(),
+            // Status.BUSY.value())) {
+            this.sign.lock();
+            try {
+                this.enterRoom();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                this.exitRoom();
+                this.isRoomAvailable.set(Status.AVAILABLE.value());
+                this.sign.unlock();
+                wantsToEnter = this.doesGuestWantToEnter();
             }
+            // }
         }
     }
 }

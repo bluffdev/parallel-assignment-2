@@ -2,7 +2,6 @@ package minotaur.two;
 
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
 
 public class CrystalVase {
     private Integer guestCount;
@@ -12,7 +11,7 @@ public class CrystalVase {
     }
 
     public void simulate() {
-        Lock sign = new SignTTASLock();
+        SignTTASLock sign = new SignTTASLock();
         AtomicBoolean isRoomAvailable = new AtomicBoolean(true);
 
         Date start = new Date();

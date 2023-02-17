@@ -2,28 +2,13 @@ package minotaur.two;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-
-// enum Status {
-//     AVAILABLE(true), BUSY(false);
-
-//     private Boolean status;
-
-//     public Boolean value() {
-//         return this.status;
-//     }
-
-//     private Status(Boolean status) {
-//         this.status = status;
-//     }
-// }
 
 public class Guest implements Runnable {
     private Integer id;
     private AtomicBoolean isRoomAvailable;
-    private Lock sign;
+    private SignTTASLock sign;
 
-    public Guest(Integer id, AtomicBoolean isRoomAvailable, Lock sign) {
+    public Guest(Integer id, AtomicBoolean isRoomAvailable, SignTTASLock sign) {
         this.id = id;
         this.isRoomAvailable = isRoomAvailable;
         this.sign = sign;

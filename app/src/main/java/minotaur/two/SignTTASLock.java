@@ -1,9 +1,6 @@
 package minotaur.two;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
 enum Status {
     AVAILABLE(false), BUSY(true);
@@ -19,25 +16,27 @@ enum Status {
     }
 }
 
-public class SignTTASLock implements Lock {
+// This is a TTAS lock from the textbook that represents the sign
+public class SignTTASLock {
     private AtomicBoolean state;
 
     public SignTTASLock() {
         this.state = new AtomicBoolean();
     }
 
-    @Override
     public void lock() {
         while (true) {
+            // The guest checks if the room is available
             while (state.get() == Status.BUSY.value()) {
+                // The guest leaves and comes back later
             }
+            // The guest attempts to enter the room before someone else does
             if (state.compareAndSet(Status.AVAILABLE.value(), Status.BUSY.value())) {
                 return;
             }
         }
     }
 
-    @Override
     public boolean tryLock() {
         if (state.get() == Status.BUSY.value()) {
             return false;
@@ -46,22 +45,7 @@ public class SignTTASLock implements Lock {
         return state.compareAndSet(Status.AVAILABLE.value(), Status.BUSY.value());
     }
 
-    @Override
     public void unlock() {
         this.state.set(Status.AVAILABLE.value());
-    }
-
-    @Override
-    public void lockInterruptibly() throws InterruptedException {
-    }
-
-    @Override
-    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
-        return false;
-    }
-
-    @Override
-    public Condition newCondition() {
-        return null;
     }
 }

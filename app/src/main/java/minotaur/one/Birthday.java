@@ -1,37 +1,37 @@
 package minotaur.one;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Birthday {
     private Integer guestCount;
-    private Thread[] guests;
-    private Lock labyrinthLock;
-    private AtomicBoolean cupcakeWasEaten;
-    private AtomicBoolean[] guestTags;
-    private AtomicBoolean isPartyOver;
 
     public Birthday(Integer guestCount) {
         this.guestCount = guestCount;
-        this.guests = new Thread[guestCount];
-        this.labyrinthLock = new ReentrantLock();
-        this.cupcakeWasEaten = new AtomicBoolean();
-        this.guestTags = new AtomicBoolean[guestCount];
-        for (int i = 0; i < guestCount; i++) {
-            this.guestTags[i] = new AtomicBoolean();
-        }
-        this.isPartyOver = new AtomicBoolean();
     }
 
     public void simulate() {
-        // Initializes threads
-        Counter minotaur = new Counter(guestCount, this.guestTags, labyrinthLock, this.isPartyOver);
+        AtomicBoolean cupcakeWasEaten = new AtomicBoolean();
+        AtomicBoolean[] guestTags = new AtomicBoolean[this.guestCount];
+        AtomicBoolean isPartyOver = new AtomicBoolean();
+        for (int i = 0; i < guestCount; i++) {
+            guestTags[i] = new AtomicBoolean();
+        }
+        Lock labyrinthLock = new ReentrantLock();
+
+        Date start = new Date();
+
+        // Initialize Threads
+        Counter minotaur = new Counter(guestCount, guestTags, labyrinthLock, isPartyOver);
         Thread minotaurThread = new Thread(minotaur);
         minotaurThread.start();
+
+        Thread[] guests = new Thread[this.guestCount];
+
         for (int i = 0; i < guestCount; i++) {
-            Guest newGuest = new Guest(i + 1, labyrinthLock, cupcakeWasEaten, this.guestTags[i],
-                    this.isPartyOver);
+            Guest newGuest = new Guest(i + 1, labyrinthLock, cupcakeWasEaten, guestTags[i], isPartyOver);
             guests[i] = new Thread(newGuest);
             guests[i].start();
         }
@@ -42,7 +42,7 @@ public class Birthday {
             e.printStackTrace();
         }
 
-        // Wait for threads to finish
+        // Wait for guest threads to finish
         for (Thread guest : guests) {
             try {
                 guest.join();
@@ -50,5 +50,9 @@ public class Birthday {
                 e.printStackTrace();
             }
         }
+
+        Date end = new Date();
+        Long seconds = (end.getTime() - start.getTime());
+        System.out.println("Runtime: " + seconds + "ms");
     }
 }

@@ -21,7 +21,6 @@ enum Status {
 public class Guest implements Runnable {
     private Integer id;
     private AtomicBoolean isRoomAvailable;
-    private Boolean entered = false;
     private Lock roomLock;
 
     public Guest(Integer id, AtomicBoolean isRoomAvailable, Lock roomLock) {
@@ -30,19 +29,35 @@ public class Guest implements Runnable {
         this.roomLock = roomLock;
     }
 
+    private Boolean doesGuestWantToEnter() {
+        int percentage = ThreadLocalRandom.current().nextInt(0, 10);
+        return percentage < 2 ? false : true;
+    }
+
+    private void enterRoom() {
+        System.out.println("Guest " + this.id + " entered the room");
+    }
+
+    private void exitRoom() {
+        System.out.println("Guest " + this.id + " exited the room");
+    }
+
     @Override
     public void run() {
-        while (!this.entered) {
+        Boolean wantsToEnter = this.doesGuestWantToEnter();
+
+        while (wantsToEnter) {
             if (this.isRoomAvailable.compareAndSet(Status.AVAILABLE.value(), Status.BUSY.value())) {
                 this.roomLock.lock();
                 try {
-                    System.out.println("meme");
+                    this.enterRoom();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    this.entered = true;
+                    this.exitRoom();
                     this.isRoomAvailable.set(Status.AVAILABLE.value());
                     this.roomLock.unlock();
+                    wantsToEnter = this.doesGuestWantToEnter();
                 }
             }
         }

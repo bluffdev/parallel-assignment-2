@@ -4,11 +4,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Guest implements Runnable {
     private Integer id;
-    private SignBackoffLock sign;
+    private CLHLock lock;
 
-    public Guest(Integer id, SignBackoffLock sign) {
+    public Guest(Integer id, CLHLock lock) {
         this.id = id;
-        this.sign = sign;
+        this.lock = lock;
     }
 
     private Boolean doesGuestWantToEnter() {
@@ -29,14 +29,14 @@ public class Guest implements Runnable {
         Boolean wantsToEnter = this.doesGuestWantToEnter();
 
         while (wantsToEnter) {
-            this.sign.lock();
+            this.lock.lock();
             try {
                 this.enterRoom();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 this.exitRoom();
-                this.sign.unlock();
+                this.lock.unlock();
                 wantsToEnter = this.doesGuestWantToEnter();
             }
         }

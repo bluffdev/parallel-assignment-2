@@ -10,14 +10,15 @@ public class CrystalVase {
     }
 
     public void simulate() {
-        SignBackoffLock sign = new SignBackoffLock();
+        CLHLock lock = new CLHLock();
 
         Date start = new Date();
 
         Thread[] guests = new Thread[this.guestCount];
 
         for (int i = 0; i < this.guestCount; i++) {
-            Guest newGuest = new Guest(i + 1, sign);
+            // Guest newGuest = new Guest(i + 1, sign);
+            Guest newGuest = new Guest(i + 1, lock);
             guests[i] = new Thread(newGuest);
             guests[i].start();
         }

@@ -8,6 +8,7 @@ import minotaur.two.CrystalVase;
 public class App {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
+        System.out.print("Enter Input: ");
         String input = scan.nextLine();
         scan.close();
 

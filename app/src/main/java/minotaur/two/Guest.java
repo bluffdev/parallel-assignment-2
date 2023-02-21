@@ -16,6 +16,11 @@ public class Guest implements Runnable {
         return percentage < 2 ? false : true;
     }
 
+    private Boolean doesGuestWantToEnterAgain() {
+        int percentage = ThreadLocalRandom.current().nextInt(0, 10);
+        return percentage < 5 ? false : true;
+    }
+
     private void enterRoom() {
         System.out.println("Guest " + this.id + " entered the room");
     }
@@ -37,7 +42,7 @@ public class Guest implements Runnable {
             } finally {
                 this.exitRoom();
                 this.lock.unlock();
-                wantsToEnter = this.doesGuestWantToEnter();
+                wantsToEnter = this.doesGuestWantToEnterAgain();
             }
         }
     }

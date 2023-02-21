@@ -24,9 +24,9 @@ public class Birthday {
         Date start = new Date();
 
         // Initialize Threads
-        Counter minotaur = new Counter(guestCount, guestTags, labyrinthLock, isPartyOver);
-        Thread minotaurThread = new Thread(minotaur);
-        minotaurThread.start();
+        Counter counter = new Counter(guestCount, guestTags, labyrinthLock, isPartyOver);
+        Thread counterThread = new Thread(counter);
+        counterThread.start();
 
         Thread[] guests = new Thread[this.guestCount];
 
@@ -37,7 +37,7 @@ public class Birthday {
         }
 
         try {
-            minotaurThread.join();
+            counterThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -39,7 +39,7 @@ I used Java's ReentrantLock to prevent multiple guests from going into the labyr
 
 ### Strategy 1
 
-This strategy allows any guest to check whether the showroom's door is open at anytime and try to enter the room. The main issue with this is that when a guest tries to acquire a lock, they keep attempting to grab the lock until the room is empty. This will effect performance since the threads are constantly bombarding the CPU by trying to acquire the lock.
+This strategy allows any guest to check whether the showroom's door is open at anytime and try to enter the room. The main issue with this is that when a guest tries to acquire a lock, they will keep attempting to grab the lock until the room is empty. This will effect performance since the threads are constantly bombarding the CPU by trying to acquire the lock.
 
 ### Strategy 2
 
@@ -47,8 +47,8 @@ This strategy uses a sign to indicate if the showroom is available or empty. Thi
 
 ### Strategy 3
 
-This strategy requires the guests to enter a line in order to enter the showroom. This line is represented as a queue. The main advantage to this strategy is that it guarantees that each guest will have a chance to enter the showroom. This is better than the second strategy since it does not prevent starvation. It will also have great performance like the second strategy
+This strategy requires the guests to enter a line in order to enter the showroom. This line is represented as a queue. The main advantage to this strategy is that it guarantees that each guest will have a chance to enter the showroom. This is better than the second strategy since it does not prevent starvation. It will also have great performance like the second strategy.
 
 ### Selected Strategy
 
-I decided to try strategy 2 and 3 but I used 3 for my final submission. I left the sign lock in my repository for me to reference in the future. The main reason for choosing strategy 3 over strategy 2 is that it prevents starvation. The queue is represented using a CLH Lock which I got from the textbook. Guests will enter the queue once they try to acquire the lock. A guest has a 50% chance of wanting to enter the showroom at least once. After a guest enters, they will have a 50% of wanting to enter again. The program ends once ever guest has decided they do not want to enter the room anymore.
+I decided to try strategy 2 and 3 but I used 3 for my final submission. I left the sign lock in my repository for me to reference in the future. The main reason for choosing strategy 3 over strategy 2 is that it prevents starvation. The queue is represented using a CLH Lock which I got from the textbook. Guests will enter the queue once they try to acquire the lock. A guest has a 80% chance of wanting to enter the showroom at least once. After a guest enters, they will have a 50% of wanting to enter again. The program ends once every guest has decided they do not want to enter the room anymore.

@@ -6,9 +6,11 @@ The Minotaur's Birthday Party
 
 ### Gradle
 
-Gradle does not need to be installed on your computer
+Gradle does not need to be installed on your computer. It will run slow the first time.
 
-In the root directory run:<br> `./gradlew --console plain run`
+In the root directory run:<br>
+Linux/MacOS: `./gradlew --console plain run` <br>
+Windows: `.\gradlew.bat --console plain run`
 <br>
 The program will ask for input with this format:
 <br>
